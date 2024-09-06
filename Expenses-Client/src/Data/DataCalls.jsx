@@ -1,5 +1,5 @@
 
-const BASE_URL = "http://localhost:3000/"
+const BASE_URL = "https://expenses-server-tau.vercel.app/"
 
 const defaultOptions = {
   "Content-Type": "application/json"
