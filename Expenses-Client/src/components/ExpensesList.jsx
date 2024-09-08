@@ -1,28 +1,45 @@
 import React, { useEffect, useState } from 'react'
 import { GetAllExpenses } from '../Data/DataCalls'
+import { motion } from "framer-motion"
 import Expenses from './Expenses'
 import Button from './Button'
+import { useLoaderData, useNavigate } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 
-const ExpensesList = ({setPage}) => {
+const ExpensesList = () => {
 
-  const [expenses, setExpenses] = useState([])
+  const expenses = useLoaderData();
 
-  useEffect(() => {
-    GetAllExpenses((d) => setExpenses(d), (err) => alert(err))
+  const navigate = useNavigate();
 
-  }, [])
-
+  console.log('first', expenses)
 
   return (
-    <div className='w-fit p-8  flex flex-col items-center rounded-xl border-2 border-gray-700 backdrop-blur-lg gap-3	justify-between shadow-2xl'>
-      <ul className='bg-white shadow overflow-auto rounded-md max-w-sm mx-auto min-w-64 '>
+    <div className='p-8 h-full flex flex-col items-center gap-3 justify-between'>
+      <AnimatePresence>
 
-        {expenses.map((exp) => {
-          return <Expenses key={exp._id} exp={exp}/>
-        })}
-      </ul>
+        <ul className='shadow overflow-auto rounded-md max-w-sm mx-auto min-w-64 '>
+          {expenses?.map((exp, i) => {
+            return <motion.div
+            initial={{x:'-100%'}}
+            animate={{
+              x:'0%',
+              
+            }}
+            transition={{
+              delay:i/8
+            }}
+            
+            >
+              <Expenses key={exp._id} exp={exp} index={i} />
+            </motion.div>
+          })}
 
-      <Button type={"button"} onClick={()=>setPage(1)}>להוספה +  </Button>
+        </ul>
+      </AnimatePresence>
+      <p className='text-xl font-extrabold '>{`סה"כ: ${expenses.reduce((acc, item) => acc + item.amount, 0).toLocaleString()} ₪`}</p>
+
+      <Button type={"button"} onClick={() => navigate("add")} >להוספה +  </Button>
 
     </div>
   )

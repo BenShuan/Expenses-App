@@ -2,27 +2,62 @@ const express = require("express");
 const expenses = require("../models/expenses");
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/:collection", async (req, res) => {
   try {
-    const expens = new expenses.Expenses({
-      name: req.body.name,
-      date: req.body.date,
-      amount: req.body.amount,
-      type: req.body.type,
-      whos: req.body.whos,
-    });
 
-    const newExp = await expens.save();
+    let exp = new expenses(req.body,req.params.collection)
+
+    let newExp = await exp.InsertExpenses(req.body)
+
     res.status(201).json(newExp);
+
+
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/:collection", async (req, res) => {
   try {
-    const stam = await expenses.Expenses.find();
-    res.json(stam);
+    const exp = new expenses(req.body,req.params.collection);
+
+    const list =await exp.GetExpenses();
+
+    res.json(list);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+router.get("/:collection/:id", async (req, res) => {
+  try {
+    const exp = new expenses({_id:req.params.id },req.params.collection);
+    const currExp =await exp.GetOneExpenses();
+
+    res.json(currExp);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+router.put("/:collection/:id", async (req, res) => {
+  try {
+    const exp = new expenses(req.body,req.params.collection);
+
+    const list =await exp.UpdateExpenses();
+
+    res.json(list);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+router.delete("/:collection/:id", async (req, res) => {
+  try {
+    const exp = new expenses(req.body,req.params.collection);
+
+    const list =await exp.DeleteExpenses();
+
+    res.json(list);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

@@ -1,22 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Suspense } from 'react';
 import './App.css'
-import ExpensesForm from './components/ExpensesForm'
-import ExpensesList from './components/ExpensesList'
+import { Outlet, useNavigation } from 'react-router-dom'
+
+
 
 
 function App() {
 
-  const [page, setPage] = useState(0)
 
-  const pages = [
-    <ExpensesList setPage={setPage}/>,
-    <ExpensesForm setPage={setPage}/>]
   return (
-    <div className='w-screen h-dvh bg-main flex justify-center py-16 px-8 font-sans bg-cover bg-center bg-fixed '>
-      {pages[page]}
+    <div className='w-screen h-dvh bg-main flex justify-center py-16 px-8 font-sans bg-cover bg-center bg-fixed group [perspective:1000px]'>
+      <div className={`h-full w-11/12 rounded-xl border-2 border-gray-700 backdrop-blur-lg shadow-2xl transition-all [transform-style:preserve-3d] transform:rotateY(180deg)`} >
+        <Suspense>
+
+          <Outlet />
+        </Suspense>
+
+      </div>
     </div>
+
   )
 }
 

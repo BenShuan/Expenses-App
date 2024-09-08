@@ -16,6 +16,8 @@ try {
   db.once("open", () => console.log("Server started"));
 } catch (err) {
   console.log("err", err);
+  mongoose.disconnect();
+
 }
 
 app.use(express.json());
